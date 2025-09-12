@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portfolio — Alfino Daiva Herlambang </title>
+  <meta name="description" content="Modern personal portfolio dengan animasi pada setiap toggle" />
+
+  <style>
+    :root{
+      --bg:#253857; /* dark navy */
+      --card:#0b1220;
+      --muted:#9aa4b2;
+      --accent:linear-gradient(90deg,#7c3aed,#06b6d4);
+      --glass: rgba(255,255,255,0.03);
+      --glass-2: rgba(255,255,255,0.02);
+      --radius:16px;
+      --gap:18px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: radial-gradient(1000px 600px at 10% 10%, rgba(124,58,237,0.08), transparent),
+                  radial-gradient(800px 500px at 90% 90%, rgba(6,182,212,0.06), transparent),
+                  var(--bg);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:var(--gap);
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .profile{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .avatar {
+  width: 200px; /*Sesuaikan ukuran lebar*/
+  height: 100px; /*Sesuaikan ukuran tinggi*/
+  border-radius: 50%; /* Membuat gambar menjadi lingkaran */
+  object-fit: cover; /* Memastikan gambar terisi penuh dalam lingkaran */
+  border: 4px solid var(--accent); /* Memberikan border dengan warna accent */
+  box-shadow: 0 6px 18px rgba(12, 18, 30, 0.6); /* Memberikan efek bayangan */
+}
+    
+    .name{font-size:18px;font-weight:600}
+    .role{font-size:13px;color:var(--muted)}
+
+    .nav{
+      display:flex;flex-direction:column;gap:8px;margin-top:6px;
+    }
+    .nav button{
+      text-align:left;padding:10px 12px;border-radius:12px;border:none;background:transparent;color:inherit;cursor:pointer;
+      transition:transform .25s ease, background .18s ease;
+      font-weight:500;font-size:14px;
+    }
+    .nav button:hover{transform:translateX(6px)}
+    .nav button.active{background:var(--glass);box-shadow:inset 0 1px 0 rgba(228, 213, 213, 0.02)}
+
+    .socials{display:flex;gap:8px;margin-top:auto}
+    .socials a{display:inline-flex;padding:8px;border-radius:10px;background:var(--glass-2);text-decoration:none;color:inherit;font-size:13px}
+
+    /* MAIN */
+    .main{
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      border-radius:var(--radius);padding:24px;min-height:420px;border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      display:flex;flex-direction:column;gap:18px;overflow:hidden;
+    }
+
+    .header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    /* Toggable sections (accordion-like) */
+    .toggle{
+      background:transparent;border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.02);
+      overflow:hidden;position:relative;
+    }
+    .toggle .head{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
+    .toggle .title{font-weight:600}
+    .chev{width:36px;height:36px;border-radius:10px;display:inline-grid;place-items:center;background:var(--glass-2);transition:transform .35s ease}
+
+    .chev svg{width:18px;height:18px;transform-origin:center}
+
+    .content{
+      margin-top:12px;overflow:hidden;transition:height .35s ease, opacity .25s ease;opacity:0;height:0;
+    }
+    .content.open{opacity:1}
+
+    /* project cards */
+    .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);transition:transform .25s ease, box-shadow .25s ease}
+    .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(12,18,30,0.6)}
+    .tag{display:inline-block;padding:6px 8px;font-size:12px;border-radius:999px;background:rgba(255,255,255,0.02)}
+
+    /* small utilities */
+    .btn{padding:10px 14px;border-radius:12px;border:none;background-image:var(--accent);color:#fff;font-weight:600;cursor:pointer}
+    .btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  background-image: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+    /* animations */
+    @keyframes popup {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.toggle .content.open {
+  animation: popup 0.3s ease-out;
+}
+
+    /* responsive */
+    @media (max-width:880px){
+      .container{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+        <div class="profile">
+            <img class="avatar" src="images/profil.png" alt="Foto Profil" />
+            <div>
+              <div class="name">Alfino Daiva Herlambang</div>
+              <div class="role">Fotografer • Videografer • Freelancer Editor & UI UX Designer</div>
+            </div>
+          </div>
+
+      <nav class="nav" aria-label="Navigation">
+        <button class="nav-btn active" data-target="about">About</button>
+        <button class="nav-btn" data-target="projects">Projects</button>
+        <button class="nav-btn" data-target="skills">Skills</button>
+        <button class="nav-btn" data-target="contact">Contact</button>
+      </nav>
+
+      <div class="socials">
+        <a href="https://www.instagram.com/a_daiv">instagram</a>
+        <a href="mailto:alvinodaiva@gmail.com">Email</a>
+        <a href ="https://drive.google.com/file/d/1gWLNelEHBn1iJkRJcXRfMYerdVhM25tm/view?usp=sharing" download cv>CV</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h1>Hallo — I'M Alfino Daiva Herlambang </h1>
+          <p class="lead">Saya membuat pengalaman digital yang terkesan sederhana tetapi bermakna.</p>
+        </div>
+        <div>
+          <button id="themeToggle" class="btn">Toggle Theme</button>
+        </div>
+      </div>
+
+      <!-- ABOUT (toggle) -->
+      <section id="about" class="toggle" aria-expanded="true">
+        <div class="head">
+          <div class="title">Tentang Saya</div>
+          <div class="chev" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="content">
+          <p>Saya seorang editor yang memiliki ketertarikan kepada salah satu objek yang membuat terkekesan pada saat pertama kali melihatnya. Saya suka membangun interface yang menarik dan efisien.</p>
+        </div>
+      </section>
+
+      <!-- PROJECTS (toggle with cards) -->
+      <section id="projects" class="toggle">
+        <div class="head">
+          <div class="title">Proyek</div>
+          <div class="chev" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="content">
+          <div class="projects">
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong>Fotografer</strong><span class="tag">React</span></div>
+              <p style="margin-top:8px;color:var(--muted);font-size:13px">membuat sudut pandang yang berbeda untuk memberikan kesan kepada viewer.</p>
+            </div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong>Videograger</strong><span class="tag">HTML/CSS</span></div>
+              <p style="margin-top:8px;color:var(--muted);font-size:13px">Cara menyampaikan sesuatu kepada viewers dengan video.</p>
+            </div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center"><strong>Editor & UI UX Designer</strong><span class="tag">Next.js</span></div>
+              <p style="margin-top:8px;color:var(--muted);font-size:13px">Blog dengan sistem konten yang disesuaikan.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="toggle">
+        <div class="head">
+          <div class="title">Skills</div>
+          <div class="chev" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="content">
+          <ul style="margin:0;padding-left:18px;color:var(--muted);">
+            <li>FotoGrafi : Adobe Lighroom, Vsco</li>
+            <li>VideoGrafi: AdopePreimer, Davinci Resolve, VN, Capcut</li>
+            <li>Editor & UI UX Designer : Design Systems & Figma</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="toggle">
+        <div class="head">
+          <div class="title">Kontak</div>
+          <div class="chev" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="content">
+          <form onsubmit="event.preventDefault()" style="display:grid;gap:10px">
+            <input placeholder="Nama" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit" />
+            <input placeholder="Email" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit" />
+            <textarea placeholder="Pesan" rows="4" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit"></textarea>
+            <div style="display:flex;justify-content:flex-end"><button class="btn">Kirim</button></div>
+          </form>
+        </div>
+      </section>
+
+      <div class="spark" aria-hidden></div>
+    </main>
+  </div>
+
+  <script>
+    // Helper: smooth height animation using Web Animations API
+    function animateHeight(el, toHeight){
+      const from = el.getBoundingClientRect().height;
+      const anim = el.animate([
+        {height: from + 'px', opacity: getComputedStyle(el).opacity},
+        {height: toHeight + 'px', opacity: toHeight>0 ? 1 : 0}
+      ],{duration:300,easing:'cubic-bezier(.2,.9,.2,1)'});
+      anim.onfinish = ()=>{
+        el.style.height = toHeight + 'px';
+        if(toHeight===0) el.style.display = 'none';
+        else el.style.display = '';
+      };
+    }
+
+    document.querySelectorAll('.toggle').forEach(section=>{
+      const head = section.querySelector('.head');
+      const content = section.querySelector('.content');
+      const chev = section.querySelector('.chev');
+
+      // initialize: show only About
+      if(section.id==='about'){
+        content.style.display='block';
+        content.style.height = content.scrollHeight + 'px';
+        content.classList.add('open');
+      } else {
+        content.style.display='none';
+        content.style.height = '0px';
+      }
+
+      head.addEventListener('click', ()=>{
+        const isOpen = content.classList.contains('open');
+        if(isOpen){
+          // close
+          content.classList.remove('open');
+          chev.style.transform = 'rotate(0deg)';
+          // animate
+          animateHeight(content, 0);
+        } else {
+          // open
+          // set display block to measure
+          content.style.display = 'block';
+          const targetH = content.scrollHeight;
+          content.style.height = getComputedStyle(content).height; // lock current
+          content.classList.add('open');
+          chev.style.transform = 'rotate(180deg)';
+          animateHeight(content, targetH);
+        }
+      });
+    });
+
+    // NAV buttons change scroll/focus and open corresponding toggle
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.dataset.target;
+        // close others
+        document.querySelectorAll('.toggle').forEach(s=>{
+          const c = s.querySelector('.content');
+          const ch = s.querySelector('.chev');
+          if(s.id!==target && c.classList.contains('open')){
+            c.classList.remove('open');
+            ch.style.transform='rotate(0deg)';
+            animateHeight(c,0);
+          }
+        });
+        // open target
+        const el = document.getElementById(target);
+        if(el){
+          const content = el.querySelector('.content');
+          const chev = el.querySelector('.chev');
+          if(!content.classList.contains('open')){
+            content.style.display='block';
+            const h = content.scrollHeight;
+            content.classList.add('open');
+            chev.style.transform='rotate(180deg)';
+            animateHeight(content,h);
+          }
+          // focus for accessibility
+          el.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+      });
+    });
+
+    // Theme toggle (simple invert) — you can expand to persist in localStorage
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.addEventListener('click', ()=>{
+      const root = document.documentElement;
+      if(root.style.getPropertyValue('--bg') === '#ffffff'){
+        root.style.setProperty('--bg','#0f1724');
+        root.style.setProperty('--card','#0b1220');
+        themeBtn.textContent = 'Toggle Theme';
+      } else {
+        root.style.setProperty('--bg','#ffffff');
+        root.style.setProperty('--card','#f8fafc');
+        themeBtn.textContent = 'Toggle Theme';
+      }
+    });
+
+    // small accessibility: open About on load
+    window.addEventListener('load', ()=>{
+      const about = document.getElementById('about');
+      if(about){ about.querySelector('.head').focus?.(); }
+    });
+  </script>
+</body>
+</html>
